@@ -1,0 +1,22 @@
+{
+  "name": "react-task-list",
+  "version": "0.0.0",
+  "description": "A (very) simple task list built in React",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jjmax75/react-task-list.git"
+  },
+  "keywords": [
+    "react",
+    "task list"
+  ],
+  "author": "Sean Behan",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/jjmax75/react-task-list/issues"
+  }
+}
