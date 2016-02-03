@@ -59,18 +59,93 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	var styles = {
+	  tasksStyle: {
+	    margin: '50px auto',
+	    width: '240px',
+	    background: 'white',
+	    border: '1px solid #cdd3d7',
+	    borderRadius: '4px',
+	    boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)'
+	  },
+	
+	  tasksHeader: {
+	    position: 'relative',
+	    lineHeight: '24px',
+	    padding: '7px 15px',
+	    color: '#5d6b6c',
+	    textShadow: '0 1px rgba(255, 255, 255, 0.7)',
+	    background: '#f0f1f2',
+	    borderBottom: '1px solid #d1d1d1',
+	    borderRadius: '3px 3px 0 0',
+	    backgroundImage: 'linear-gradient(to bottom, #f5f7fd, #e6eaec)',
+	    boxShadow: 'inset 0 1px rgba(255, 255, 255, 0.5), 0 1px rgba(0, 0, 0, 0.03)'
+	  },
+	
+	  tasksTitle: {
+	    lineHeight: 'inherit',
+	    fontSize: '14px',
+	    fontWeight: 'bold',
+	    color: 'inherit'
+	  },
+	
+	  tasksListItem: {
+	    display: 'block',
+	    lineHeight: '24px',
+	    padding: '12px 15px',
+	    cursor: 'pointer',
+	    userSelect: 'none'
+	  },
+	
+	  tasksListCb: {
+	    display: 'none'
+	  },
+	
+	  tasksListMark: {
+	    position: 'relative',
+	    display: 'inline-block',
+	    verticalAlign: 'top',
+	    marginRight: '12px',
+	    width: '20px',
+	    height: '20px',
+	    border: '2px solid #c4cbd2',
+	    borderRadius: '12px'
+	  },
+	
+	  tasksListMarkBefore: {
+	    content: '',
+	    display: 'none',
+	    position: 'absolute',
+	    top: '50%',
+	    left: '50%',
+	    margin: '-5px 0 0 -6px',
+	    height: '4px',
+	    width: '8px',
+	    border: 'solid #39ca74',
+	    borderWidth: '0 0 4px 4px',
+	    transform: 'rotate(-45deg)'
+	  },
+	
+	  tasksListDesc: {
+	    fontWeight: 'bold',
+	    color: '#8a9a9b'
+	  }
+	
+	};
+	
 	var TaskRow = _react2.default.createClass({
 	  displayName: 'TaskRow',
 	
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'label',
-	      { 'class': 'tasks-list-item' },
-	      _react2.default.createElement('input', { type: 'checkbox', name: this.props.key, 'class': 'task-list-cb' }),
-	      _react2.default.createElement('span', { 'class': 'tasks-list-mark' }),
+	      { style: styles.tasksListItem },
+	      _react2.default.createElement('input', { type: 'checkbox', name: this.props.key, style: styles.tasksListCb, checked: true }),
+	      _react2.default.createElement('span', { style: styles.tasksListMarkBefore }),
+	      _react2.default.createElement('span', { style: styles.tasksListMark }),
 	      _react2.default.createElement(
 	        'span',
-	        { 'class': 'tasks-list-desc' },
+	        { style: styles.tasksListDesc },
 	        this.props.task.title
 	      )
 	    );
@@ -90,7 +165,11 @@
 	    return _react2.default.createElement(
 	      'div',
 	      null,
-	      rows
+	      _react2.default.createElement(
+	        'fieldset',
+	        null,
+	        rows
+	      )
 	    );
 	  }
 	});
@@ -107,16 +186,22 @@
 	  displayName: 'LiveTasks',
 	
 	  render: function render() {
+	
 	    var rows = [];
 	    this.props.tasks.forEach(function (task) {
 	      if (!task.done) {
 	        rows.push(_react2.default.createElement(TaskRow, { task: task, key: task.title }));
 	      }
 	    });
+	
 	    return _react2.default.createElement(
-	      'fieldset',
-	      { 'class': 'live-tasks tasks-list' },
-	      rows
+	      'div',
+	      null,
+	      _react2.default.createElement(
+	        'fieldset',
+	        null,
+	        rows
+	      )
 	    );
 	  }
 	});
@@ -126,8 +211,17 @@
 	
 	  render: function render() {
 	    return _react2.default.createElement(
-	      'div',
-	      null,
+	      'section',
+	      { style: styles.tasksStyle },
+	      _react2.default.createElement(
+	        'header',
+	        { style: styles.tasksHeader },
+	        _react2.default.createElement(
+	          'h1',
+	          { style: styles.tasksTitle },
+	          'ToDos'
+	        )
+	      ),
 	      _react2.default.createElement(LiveTasks, { tasks: this.props.tasks }),
 	      ' ',
 	      _react2.default.createElement(AddTask, null),
