@@ -97,38 +97,15 @@
 	    userSelect: 'none'
 	  },
 	
-	  tasksListCb: {
-	    display: 'none'
-	  },
-	
-	  tasksListMark: {
-	    position: 'relative',
-	    display: 'inline-block',
-	    verticalAlign: 'top',
-	    marginRight: '12px',
-	    width: '20px',
-	    height: '20px',
-	    border: '2px solid #c4cbd2',
-	    borderRadius: '12px'
-	  },
-	
-	  tasksListMarkBefore: {
-	    content: '',
-	    display: 'none',
-	    position: 'absolute',
-	    top: '50%',
-	    left: '50%',
-	    margin: '-5px 0 0 -6px',
-	    height: '4px',
-	    width: '8px',
-	    border: 'solid #39ca74',
-	    borderWidth: '0 0 4px 4px',
-	    transform: 'rotate(-45deg)'
-	  },
-	
-	  tasksListDesc: {
+	  tasksListDescOpen: {
 	    fontWeight: 'bold',
 	    color: '#8a9a9b'
+	  },
+	
+	  taskListDescDone: {
+	    fontWeight: 'bold',
+	    color: '#34bf6e',
+	    textDecoration: 'line-through'
 	  }
 	
 	};
@@ -136,39 +113,22 @@
 	var TaskRow = _react2.default.createClass({
 	  displayName: 'TaskRow',
 	
+	  getInitialState: function getInitialState() {
+	    return { open: true };
+	  },
+	  handleChange: function handleChange(e) {
+	    this.setState({ open: !this.state.open });
+	  },
 	  render: function render() {
+	    var style = this.state.open ? styles.taskListDescDone : styles.taskListDescOpen;
 	    return _react2.default.createElement(
 	      'label',
 	      { style: styles.tasksListItem },
-	      _react2.default.createElement('input', { type: 'checkbox', name: this.props.key, style: styles.tasksListCb, checked: true }),
-	      _react2.default.createElement('span', { style: styles.tasksListMarkBefore }),
-	      _react2.default.createElement('span', { style: styles.tasksListMark }),
+	      _react2.default.createElement('input', { type: 'checkbox', name: this.props.key, defaultChecked: true, onChange: this.handleChange }),
 	      _react2.default.createElement(
 	        'span',
-	        { style: styles.tasksListDesc },
+	        { style: style },
 	        this.props.task.title
-	      )
-	    );
-	  }
-	});
-	
-	var CompletedTasks = _react2.default.createClass({
-	  displayName: 'CompletedTasks',
-	
-	  render: function render() {
-	    var rows = [];
-	    this.props.tasks.forEach(function (task) {
-	      if (task.done) {
-	        rows.push(_react2.default.createElement(TaskRow, { task: task, key: task.title }));
-	      }
-	    });
-	    return _react2.default.createElement(
-	      'div',
-	      null,
-	      _react2.default.createElement(
-	        'fieldset',
-	        null,
-	        rows
 	      )
 	    );
 	  }
@@ -182,15 +142,18 @@
 	  }
 	});
 	
-	var LiveTasks = _react2.default.createClass({
-	  displayName: 'LiveTasks',
+	var Tasks = _react2.default.createClass({
+	  displayName: 'Tasks',
 	
 	  render: function render() {
 	
 	    var rows = [];
 	    this.props.tasks.forEach(function (task) {
-	      if (!task.done) {
-	        rows.push(_react2.default.createElement(TaskRow, { task: task, key: task.title }));
+	      var row = _react2.default.createElement(TaskRow, { task: task, key: task.title });
+	      if (task.done) {
+	        rows.push(row);
+	      } else {
+	        rows.unshift(row);
 	      }
 	    });
 	
@@ -222,11 +185,8 @@
 	          'ToDos'
 	        )
 	      ),
-	      _react2.default.createElement(LiveTasks, { tasks: this.props.tasks }),
-	      ' ',
 	      _react2.default.createElement(AddTask, null),
-	      _react2.default.createElement(CompletedTasks, { tasks: this.props.tasks }),
-	      ' '
+	      _react2.default.createElement(Tasks, { tasks: this.props.tasks })
 	    );
 	  }
 	});

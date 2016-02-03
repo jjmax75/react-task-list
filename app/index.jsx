@@ -39,69 +39,33 @@ var styles = {
     userSelect: 'none'
   },
 
-  tasksListCb: {
-      display: 'none'
-  },
-
-  tasksListMark: {
-    position: 'relative',
-    display: 'inline-block',
-    verticalAlign: 'top',
-    marginRight: '12px',
-    width: '20px',
-    height: '20px',
-    border: '2px solid #c4cbd2',
-    borderRadius: '12px'
-  },
-
-  tasksListMarkBefore: {
-    content: '',
-    display: 'none',
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    margin: '-5px 0 0 -6px',
-    height: '4px',
-    width: '8px',
-    border: 'solid #39ca74',
-    borderWidth: '0 0 4px 4px',
-    transform: 'rotate(-45deg)'
-  },
-
-  tasksListDesc: {
+  tasksListDescOpen: {
     fontWeight: 'bold',
     color: '#8a9a9b'
+  },
+
+  taskListDescDone: {
+    fontWeight: 'bold',
+    color: '#34bf6e',
+    textDecoration: 'line-through'
   }
 
 };
 
 var TaskRow = React.createClass({
+  getInitialState: function() {
+    return {open: true};
+  },
+  handleChange: function(e) {
+    this.setState({open: !this.state.open});
+  },
   render: function() {
+    var style = this.state.open ? styles.taskListDescDone : styles.taskListDescOpen;
     return (
       <label style={styles.tasksListItem}>
-        <input type="checkbox" name={this.props.key} style={styles.tasksListCb} checked />
-        <span style={styles.tasksListMarkBefore}></span>
-        <span style={styles.tasksListMark}></span>
-        <span style={styles.tasksListDesc}>{this.props.task.title}</span>
+        <input type="checkbox" name={this.props.key} defaultChecked onChange={this.handleChange} />
+        <span style={style}>{this.props.task.title}</span>
       </label>
-    );
-  }
-});
-
-var CompletedTasks = React.createClass({
-  render: function() {
-    var rows = [];
-    this.props.tasks.forEach(function(task) {
-      if (task.done) {
-        rows.push(<TaskRow task={task} key={task.title} />);
-      }
-    });
-    return (
-      <div>
-        <fieldset>
-          {rows}
-        </fieldset>
-      </div>
     );
   }
 });
@@ -114,13 +78,16 @@ var AddTask = React.createClass({
   }
 });
 
-var LiveTasks = React.createClass({
+var Tasks = React.createClass({
   render: function() {
 
     var rows = [];
     this.props.tasks.forEach(function(task) {
-      if (!task.done) {
-        rows.push(<TaskRow task={task} key={task.title} />);
+      var row = <TaskRow task={task} key={task.title} />;
+      if (task.done) {
+        rows.push(row);
+      } else {
+        rows.unshift(row);
       }
     });
 
@@ -141,9 +108,8 @@ var TaskList = React.createClass({
         <header style={styles.tasksHeader}>
           <h1 style={styles.tasksTitle}>ToDos</h1>
         </header>
-        <LiveTasks tasks={this.props.tasks} /> {/* TODO - Divs with just task rows conditional */}
         <AddTask />
-        <CompletedTasks tasks={this.props.tasks} /> {/* TODO - Divs with just task rows conditional */}
+        <Tasks tasks={this.props.tasks} />
       </section>
     );
   }
