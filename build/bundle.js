@@ -97,14 +97,14 @@
 	    userSelect: 'none'
 	  },
 	
-	  tasksListDescOpen: {
+	  taskListDescOpen: {
 	    fontWeight: 'bold',
-	    color: '#8a9a9b'
+	    color: '#34bf6e'
 	  },
 	
 	  taskListDescDone: {
 	    fontWeight: 'bold',
-	    color: '#34bf6e',
+	    color: '#8a9a9b',
 	    textDecoration: 'line-through'
 	  }
 	
@@ -114,7 +114,8 @@
 	  displayName: 'TaskRow',
 	
 	  getInitialState: function getInitialState() {
-	    return { open: true };
+	    var initial = this.props.task.done ? true : false;
+	    return { open: initial };
 	  },
 	  handleChange: function handleChange(e) {
 	    this.setState({ open: !this.state.open });
@@ -124,7 +125,7 @@
 	    return _react2.default.createElement(
 	      'label',
 	      { style: styles.tasksListItem },
-	      _react2.default.createElement('input', { type: 'checkbox', name: this.props.key, defaultChecked: true, onChange: this.handleChange }),
+	      _react2.default.createElement('input', { type: 'checkbox', name: this.props.key, checked: this.state.open, onChange: this.handleChange }),
 	      _react2.default.createElement(
 	        'span',
 	        { style: style },

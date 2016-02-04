@@ -39,14 +39,14 @@ var styles = {
     userSelect: 'none'
   },
 
-  tasksListDescOpen: {
+  taskListDescOpen: {
     fontWeight: 'bold',
-    color: '#8a9a9b'
+    color: '#34bf6e'
   },
 
   taskListDescDone: {
     fontWeight: 'bold',
-    color: '#34bf6e',
+    color: '#8a9a9b',
     textDecoration: 'line-through'
   }
 
@@ -54,7 +54,8 @@ var styles = {
 
 var TaskRow = React.createClass({
   getInitialState: function() {
-    return {open: true};
+    var initial = this.props.task.done ? true : false;
+    return {open: initial};
   },
   handleChange: function(e) {
     this.setState({open: !this.state.open});
@@ -63,7 +64,7 @@ var TaskRow = React.createClass({
     var style = this.state.open ? styles.taskListDescDone : styles.taskListDescOpen;
     return (
       <label style={styles.tasksListItem}>
-        <input type="checkbox" name={this.props.key} defaultChecked onChange={this.handleChange} />
+        <input type="checkbox" name={this.props.key} checked={this.state.open} onChange={this.handleChange} />
         <span style={style}>{this.props.task.title}</span>
       </label>
     );
