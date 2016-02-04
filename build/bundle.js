@@ -117,9 +117,11 @@
 	    var initial = this.props.task.done ? true : false;
 	    return { open: initial };
 	  },
+	
 	  handleChange: function handleChange(e) {
 	    this.setState({ open: !this.state.open });
 	  },
+	
 	  render: function render() {
 	    var style = this.state.open ? styles.taskListDescDone : styles.taskListDescOpen;
 	    return _react2.default.createElement(
@@ -138,8 +140,22 @@
 	var AddTask = _react2.default.createClass({
 	  displayName: 'AddTask',
 	
+	  handleChange: function handleChange() {
+	    this.props.onUserInput(this.refs.newTaskInput.value);
+	  },
+	
 	  render: function render() {
-	    return _react2.default.createElement('input', { type: 'text', placeholder: '+ add a task...' });
+	    return _react2.default.createElement(
+	      'form',
+	      null,
+	      _react2.default.createElement('input', {
+	        type: 'text',
+	        placeholder: '+ add a task...',
+	        value: this.props.newTask,
+	        ref: 'newTaskInput',
+	        onChange: this.handleChange
+	      })
+	    );
 	  }
 	});
 	
@@ -147,7 +163,6 @@
 	  displayName: 'Tasks',
 	
 	  render: function render() {
-	
 	    var rows = [];
 	    this.props.tasks.forEach(function (task) {
 	      var row = _react2.default.createElement(TaskRow, { task: task, key: task.title });
@@ -173,6 +188,18 @@
 	var TaskList = _react2.default.createClass({
 	  displayName: 'TaskList',
 	
+	  getInitialState: function getInitialState() {
+	    return {
+	      newTask: ''
+	    };
+	  },
+	
+	  handleUserInput: function handleUserInput(newTask) {
+	    this.setState({
+	      newTask: newTask
+	    });
+	  },
+	
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'section',
@@ -186,7 +213,10 @@
 	          'ToDos'
 	        )
 	      ),
-	      _react2.default.createElement(AddTask, null),
+	      _react2.default.createElement(AddTask, {
+	        newTask: this.state.newTask,
+	        onUserInput: this.handleUserInput
+	      }),
 	      _react2.default.createElement(Tasks, { tasks: this.props.tasks })
 	    );
 	  }

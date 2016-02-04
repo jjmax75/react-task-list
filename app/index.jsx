@@ -57,9 +57,11 @@ var TaskRow = React.createClass({
     var initial = this.props.task.done ? true : false;
     return {open: initial};
   },
+
   handleChange: function(e) {
     this.setState({open: !this.state.open});
   },
+
   render: function() {
     var style = this.state.open ? styles.taskListDescDone : styles.taskListDescOpen;
     return (
@@ -72,16 +74,29 @@ var TaskRow = React.createClass({
 });
 
 var AddTask = React.createClass({
+  handleChange: function() {
+    this.props.onUserInput(
+      this.refs.newTaskInput.value
+    );
+  },
+
   render: function() {
     return (
-      <input type="text" placeholder="+ add a task..."></input>
+      <form>
+        <input
+          type="text"
+          placeholder="+ add a task..."
+          value={this.props.newTask}
+          ref="newTaskInput"
+          onChange={this.handleChange}
+        />
+      </form>
     );
   }
 });
 
 var Tasks = React.createClass({
   render: function() {
-
     var rows = [];
     this.props.tasks.forEach(function(task) {
       var row = <TaskRow task={task} key={task.title} />;
@@ -103,13 +118,28 @@ var Tasks = React.createClass({
 });
 
 var TaskList = React.createClass({
+  getInitialState: function() {
+    return {
+      newTask: ''
+    };
+  },
+
+  handleUserInput: function(newTask) {
+    this.setState({
+      newTask: newTask
+    });
+  },
+
   render: function() {
     return (
       <section style={styles.tasksStyle}>
         <header style={styles.tasksHeader}>
           <h1 style={styles.tasksTitle}>ToDos</h1>
         </header>
-        <AddTask />
+        <AddTask
+          newTask={this.state.newTask}
+          onUserInput={this.handleUserInput}
+        />
         <Tasks tasks={this.props.tasks} />
       </section>
     );
